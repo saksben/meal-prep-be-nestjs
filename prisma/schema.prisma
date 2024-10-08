@@ -18,7 +18,8 @@ model User {
   name        String
   mealPlans   MealPlan[]
   groceryList GroceryList[]
-  goals       Goal[]
+  goal        Goal?         
+  goalId      Int?
 }
 
 model Ingredient {
@@ -70,8 +71,8 @@ model Goal {
   protein       Float
   price         Float?
   mealPlans     MealPlan[]
-  user          User        @relation(fields: [userId], references: [id])
-  userId        Int
+  user          User?        @relation(fields: [userId], references: [id])
+  userId        Int?         @unique
 }
 
 model MealPlan {

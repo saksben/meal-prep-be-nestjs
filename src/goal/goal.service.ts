@@ -9,14 +9,16 @@ export class GoalService {
 
   async findAll() {
     return await this.prisma.goal.findMany({
-      include: { mealPlans: true, user: true },
+      // include: { mealPlans: true, user: true },
+      include: { mealPlans: true },
     });
   }
 
   async findOne(id: number) {
     const goal = await this.prisma.goal.findUnique({
       where: { id },
-      include: { mealPlans: true, user: true },
+      // include: { mealPlans: true, user: true },
+      include: { mealPlans: true },
     });
 
     if (!goal) {
@@ -60,9 +62,9 @@ export class GoalService {
         fat,
         protein,
         price,
-        user: {
-          connect: { id: userId },
-        },
+        // user: {
+        //   connect: { id: userId },
+        // },
       },
     });
   }
