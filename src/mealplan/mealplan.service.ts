@@ -9,14 +9,14 @@ export class MealplanService {
 
   async findAll() {
     return await this.prisma.mealPlan.findMany({
-      include: { user: true, goal: true, meals: true },
+      include: { user: true, meals: true },
     });
   }
 
   async findOne(id: number) {
     const mealPlan = await this.prisma.mealPlan.findUnique({
       where: { id },
-      include: { user: true, goal: true, meals: true },
+      include: { user: true, meals: true },
     });
 
     if (!mealPlan) {
@@ -27,7 +27,7 @@ export class MealplanService {
   }
 
   async create(createMealPlanDto: CreateMealPlanDto) {
-    const { name, userId, frequency, goalId, meals } = createMealPlanDto;
+    const { name, userId, frequency, meals } = createMealPlanDto;
 
     return await this.prisma.mealPlan.create({
       data: {
@@ -36,7 +36,6 @@ export class MealplanService {
         user: {
           connect: { id: userId },
         },
-        goal: goalId ? { connect: { id: goalId } } : undefined,
         meals: {
           connect: meals.map((mealId) => ({ id: mealId })),
         },
@@ -45,7 +44,7 @@ export class MealplanService {
   }
 
   async update(id: number, updateMealPlanDto: UpdateMealPlanDto) {
-    const { name, userId, frequency, goalId, meals } = updateMealPlanDto;
+    const { name, userId, frequency, meals } = updateMealPlanDto;
 
     await this.findOne(id); // Ensure MealPlan exists first
 
@@ -57,7 +56,6 @@ export class MealplanService {
         user: {
           connect: { id: userId },
         },
-        goal: goalId ? { connect: { id: goalId } } : undefined,
         meals: {
           connect: meals.map((mealId) => ({ id: mealId })),
         },

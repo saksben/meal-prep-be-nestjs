@@ -8,15 +8,12 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async findAll() {
-    return await this.prisma.user.findMany({
-      include: { goal: true },
-    });
+    return await this.prisma.user.findMany();
   }
 
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: { goal: true },
     });
     if (!user) throw new NotFoundException(`User with id ${id} not found.`);
     return user;
