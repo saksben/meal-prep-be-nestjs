@@ -28,8 +28,9 @@ model User {
 model Ingredient {
   id            Int           @id @default(autoincrement())
   name          String
-  unit          String
-  amount        Float
+  defaultUnit          String
+  defaultAmount        Float
+  servings      Json
   calories      Float
   carbohydrates Float
   fat           Float

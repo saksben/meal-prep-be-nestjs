@@ -22,8 +22,12 @@ export class IngredientService {
   }
 
   async create(createIngredientDto: CreateIngredientDto) {
+    const { servings, ...ingredientData } = createIngredientDto;
     return await this.prisma.ingredient.create({
-      data: createIngredientDto,
+      data: {
+        ...ingredientData,
+        servings: servings,
+      },
     });
   }
 

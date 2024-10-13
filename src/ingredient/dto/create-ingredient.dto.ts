@@ -1,7 +1,8 @@
 export class CreateIngredientDto {
   name: string;
-  unit: string;
-  amount: number;
+  defaultUnit: string;
+  defaultAmount: number;
+  servings: { amount: number; unit: string };
   calories: number;
   carbohydrates: number;
   fat: number;
