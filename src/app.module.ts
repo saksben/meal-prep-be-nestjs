@@ -7,7 +7,6 @@ import { PrismaService } from './prisma/prisma.service';
 import { UserModule } from './user/user.module';
 import { IngredientModule } from './ingredient/ingredient.module';
 import { MealModule } from './meal/meal.module';
-import { FilterModule } from './filter/filter.module';
 import { MealplanModule } from './mealplan/mealplan.module';
 import { GrocerylistModule } from './grocerylist/grocerylist.module';
 
@@ -18,7 +17,6 @@ import { GrocerylistModule } from './grocerylist/grocerylist.module';
     UserModule,
     IngredientModule,
     MealModule,
-    FilterModule,
     MealplanModule,
     GrocerylistModule,
   ],

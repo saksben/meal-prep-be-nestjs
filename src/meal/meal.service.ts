@@ -10,8 +10,12 @@ export class MealService {
   async findAll() {
     return await this.prisma.meal.findMany({
       include: {
-        ingredients: true,
-        filters: true,
+        ingredients: {
+          include: {
+            ingredient: true,
+          },
+        },
+        // filters: true,
       },
     });
   }
@@ -20,8 +24,12 @@ export class MealService {
     const meal = await this.prisma.meal.findUnique({
       where: { id },
       include: {
-        ingredients: true,
-        filters: true,
+        ingredients: {
+          include: {
+            ingredient: true,
+          },
+        },
+        // filters: true,
       },
     });
     if (!meal) {
@@ -34,11 +42,11 @@ export class MealService {
     const {
       name,
       description,
-      ingredients,
       recipe,
       servings,
       recipeLink,
-      filters,
+      ingredients,
+      // filters,
     } = createMealDto;
 
     return await this.prisma.meal.create({
@@ -49,47 +57,80 @@ export class MealService {
         servings,
         recipeLink,
         ingredients: {
-          create: ingredients.map((ingredientId) => ({
-            ingredient: { connect: { id: ingredientId } },
+          create: ingredients.map((ingredient) => ({
+            ingredientId: ingredient.ingredientId,
           })),
         },
-        filters: {
-          connect: filters.map((filterId) => ({ id: filterId })),
+        // filters: {
+        //   connect: filters.map((filterId) => ({ id: filterId })),
+        // },
+      },
+      include: {
+        ingredients: {
+          include: {
+            ingredient: true,
+          },
         },
       },
     });
   }
 
   async update(id: number, updateMealDto: UpdateMealDto) {
-    const {
-      name,
-      description,
-      ingredients,
-      recipe,
-      servings,
-      recipeLink,
-      filters,
-    } = updateMealDto;
+    const { ingredients, ...mealData } = updateMealDto;
 
+    // if (updateMealDto.ingredients) {
+    //   updateMealDto.ingredients.forEach((ingredient) => {
+    //     if (ingredient.id) {
+    //       mealData.ingredients.push({
+    //         mealId: id,
+    //         ingredientId: ingredient.id,
+    //       });
+    //     }
+    //   });
+    // }
     return await this.prisma.meal.update({
       where: { id },
       data: {
-        name,
-        description,
-        recipe,
-        servings,
-        recipeLink,
+        // name,
+        // description,
+        // recipe,
+        // servings,
+        // recipeLink,
         // Update Ingredients (reset the current set and add new ones)
+        // ingredients: {
+        //   set: [], // Remove all existing Ingredients
+        //   create: ingredients.map((ingredientId) => ({
+        //     ingredient: { connect: { id: ingredientId } }, // Add new Ingredient connections
+        //   })),
+        // },
+        // ingredients: {
+        //   deleteMany: {},
+        //   create: updateMealDto.ingredients.map((ingredient) => ({
+        //     ingredientId: ingredient.id,
+        //     mealId: id,
+        //   })),
+        // },
+
+        // Update Filters (reset the current set and add new ones
+
+        ...mealData,
         ingredients: {
-          set: [], // Remove all existing Ingredients
-          create: ingredients.map((ingredientId) => ({
-            ingredient: { connect: { id: ingredientId } }, // Add new Ingredient connections
+          deleteMany: {}, // Clear existing ingredients
+          // create: mealData.ingredients,
+          create: ingredients?.map((ingredient) => ({
+            ingredientId: ingredient.ingredientId,
           })),
         },
-        // Update Filters (reset the current set and add new ones
-        filters: {
-          set: [], // Remove all existing Filters
-          connect: filters.map((filterId) => ({ id: filterId })), // Add new Filter connections
+        // filters: {
+        //   set: [], // Remove all existing Filters
+        //   connect: updateMealDto.filters.map((filterId) => ({ id: filterId })), // Add new Filter connections
+        // },
+      },
+      include: {
+        ingredients: {
+          include: {
+            ingredient: true,
+          },
         },
       },
     });

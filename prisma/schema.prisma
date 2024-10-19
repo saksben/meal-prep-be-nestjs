@@ -46,7 +46,7 @@ model Meal {
   recipe        String
   servings      Int
   recipeLink    String?
-  filters       Filter[]
+  // filters       Filter[]
   mealPlans     MealPlan[]
   ingredients   MealIngredient[]
 }
@@ -58,12 +58,6 @@ model MealIngredient {
   ingredientId  Int
 
   @@id([mealId, ingredientId]) // Compound primary key for many-to-many
-}
-
-model Filter {
-  id      Int     @id @default(autoincrement())
-  name    String
-  meals   Meal[]
 }
 
 model MealPlan {
